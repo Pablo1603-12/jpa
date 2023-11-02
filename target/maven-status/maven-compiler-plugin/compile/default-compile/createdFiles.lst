@@ -1,0 +1,10 @@
+com\mycompany\crudbiblioteca\daos\Libros.class
+com\mycompany\crudbiblioteca\daos\Generos.class
+com\mycompany\crudbiblioteca\Controller.class
+com\mycompany\crudbiblioteca\daos\EstadoPrestamo.class
+com\mycompany\crudbiblioteca\daos\Autores.class
+com\mycompany\crudbiblioteca\daos\Prestamos.class
+com\mycompany\crudbiblioteca\daos\Accesos.class
+com\mycompany\crudbiblioteca\daos\Usuarios.class
+com\mycompany\crudbiblioteca\daos\Colecciones.class
+com\mycompany\crudbiblioteca\daos\Editoriales.class
