@@ -27,7 +27,7 @@ public class Controller {
         // Operaciones CRUD  Accesos
         //crearAcceso(em);
         leerAcceso(em);
-        
+
         // Operaciones CRUD Usuario
         //crearUsuario(em);
         //leerUsuario(em);
@@ -61,10 +61,10 @@ public class Controller {
         } else {
             System.out.println("Usuarios encontrados:");
             for (Accesos acceso : accesos) {
-                System.out.println("id: "+ acceso.getId_acceso());
+                System.out.println("id: " + acceso.getId_acceso());
                 System.out.println("Cod_acceso: " + acceso.getCodigo_acceso());
                 System.out.println("Nombre: " + acceso.getDescripcion_acceso());
-               
+
                 System.out.println("-------------------------------------------------");
                 System.out.println("");
             }
@@ -86,14 +86,20 @@ public class Controller {
 
     //USUARIOS
     public static void crearUsuario(EntityManager em) {
-        Accesos accesoUsuario = new Accesos();
-        
-        
+        leerAcceso(em);
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Ingrese el ID del acceso: ");
+        int id = scanner.nextInt();
+
+        TypedQuery<Accesos> query = em.createQuery("SELECT u FROM Accesos u", Accesos.class);
+        List<Accesos> accesos = query.getResultList();
+
+        Accesos acceso = accesos.get(id);
+
         if (!em.getTransaction().isActive()) {
             em.getTransaction().begin();
         }
-        
-        
 
         Calendar fchFinBloqueo = Calendar.getInstance();
         fchFinBloqueo.set(2023, Calendar.DECEMBER, 31);
@@ -115,7 +121,7 @@ public class Controller {
                 fchFinBloqueo,
                 fchAltaUsuario,
                 fchBajaUsuario,
-                accesoUsuario);
+                acceso);
         em.persist(usuario);
 
     }
