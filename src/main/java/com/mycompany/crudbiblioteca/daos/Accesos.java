@@ -47,4 +47,38 @@ public class Accesos {
         this.descripcion_acceso = descripcion_acceso;
     }
 
+    public long getId_acceso() {
+        return id_acceso;
+    }
+
+    public void setId_acceso(long id_acceso) {
+        this.id_acceso = id_acceso;
+    }
+
+    public String getCodigo_acceso() {
+        return codigo_acceso;
+    }
+
+    public void setCodigo_acceso(String codigo_acceso) {
+        this.codigo_acceso = codigo_acceso;
+    }
+
+    public String getDescripcion_acceso() {
+        return descripcion_acceso;
+    }
+
+    public void setDescripcion_acceso(String descripcion_acceso) {
+        this.descripcion_acceso = descripcion_acceso;
+    }
+
+    public List<Usuarios> getUsuariosConAcceso() {
+        return usuariosConAcceso;
+    }
+
+    public void setUsuariosConAcceso(List<Usuarios> usuariosConAcceso) {
+        this.usuariosConAcceso = usuariosConAcceso;
+    }
+
+    
+    
 }

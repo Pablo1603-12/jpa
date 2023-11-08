@@ -88,4 +88,102 @@ public class Usuarios {
         this.acceso = acceso;
     }
 
+    public long getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(long idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public String getDniUsuario() {
+        return dniUsuario;
+    }
+
+    public void setDniUsuario(String dniUsuario) {
+        this.dniUsuario = dniUsuario;
+    }
+
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
+
+    public String getApellidosUsuario() {
+        return apellidosUsuario;
+    }
+
+    public void setApellidosUsuario(String apellidosUsuario) {
+        this.apellidosUsuario = apellidosUsuario;
+    }
+
+    public String getTlfUsuario() {
+        return tlfUsuario;
+    }
+
+    public void setTlfUsuario(String tlfUsuario) {
+        this.tlfUsuario = tlfUsuario;
+    }
+
+    public String getEmailUsuario() {
+        return emailUsuario;
+    }
+
+    public void setEmailUsuario(String emailUsuario) {
+        this.emailUsuario = emailUsuario;
+    }
+
+    public String getClaveUsuario() {
+        return claveUsuario;
+    }
+
+    public void setClaveUsuario(String claveUsuario) {
+        this.claveUsuario = claveUsuario;
+    }
+
+    public boolean isEstaBloqueadoUsuario() {
+        return estaBloqueadoUsuario;
+    }
+
+    public void setEstaBloqueadoUsuario(boolean estaBloqueadoUsuario) {
+        this.estaBloqueadoUsuario = estaBloqueadoUsuario;
+    }
+
+    public Calendar getFchFinBloqueo() {
+        return fchFinBloqueo;
+    }
+
+    public void setFchFinBloqueo(Calendar fchFinBloqueo) {
+        this.fchFinBloqueo = fchFinBloqueo;
+    }
+
+    public Calendar getFchAltaUsuario() {
+        return fchAltaUsuario;
+    }
+
+    public void setFchAltaUsuario(Calendar fchAltaUsuario) {
+        this.fchAltaUsuario = fchAltaUsuario;
+    }
+
+    public Calendar getFchBajaUsuario() {
+        return fchBajaUsuario;
+    }
+
+    public void setFchBajaUsuario(Calendar fchBajaUsuario) {
+        this.fchBajaUsuario = fchBajaUsuario;
+    }
+
+    public Accesos getAcceso() {
+        return acceso;
+    }
+
+    public void setAcceso(Accesos acceso) {
+        this.acceso = acceso;
+    }
+
+    
+    
 }
