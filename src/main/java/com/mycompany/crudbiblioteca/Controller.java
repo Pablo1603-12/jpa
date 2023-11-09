@@ -10,6 +10,7 @@ import com.mycompany.crudbiblioteca.daos.Prestamos;
 import com.mycompany.crudbiblioteca.daos.Usuarios;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.TypedQuery;
 import java.util.Calendar;
@@ -22,26 +23,31 @@ public class Controller {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
         EntityManager em = emf.createEntityManager();
 
-        em.getTransaction().begin();
+        try {
+            em.getTransaction().begin();
 
-        // Operaciones CRUD  Accesos
-        //crearAcceso(em);
-        leerAcceso(em);
-
-        // Operaciones CRUD Usuario
-        //crearUsuario(em);
-        //leerUsuario(em);
-        //actualizarUsuario(em);
-        //eliminarUsuario(em);
-        //Crear un Autor
-        emf.close();
+            // Operaciones CRUD  Accesos
+            //crearAcceso(em);
+            //leerAcceso(em);
+            // Operaciones CRUD Usuario
+            //crearUsuario(em);
+            //leerUsuario(em);
+            actualizarUsuario(em);
+            //eliminarUsuario(em);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            em.close();
+            emf.close();
+        }
     }
 
-    //ACCESOS
+//ACCESOS
     public static void crearAcceso(EntityManager em) {
-        if (!em.getTransaction().isActive()) {
-            em.getTransaction().begin();
-        }
 
         Accesos acceso = new Accesos("Usu", "Acceso Usuario Biblioteca");
         em.persist(acceso);
@@ -49,11 +55,9 @@ public class Controller {
     }
 
     public static void leerAcceso(EntityManager em) {
-        if (!em.getTransaction().isActive()) {
-            em.getTransaction().begin();
-        }
 
-        TypedQuery<Accesos> query = em.createQuery("SELECT u FROM Accesos u", Accesos.class);
+        TypedQuery<Accesos> query = em.createQuery("SELECT u FROM Accesos u", Accesos.class
+        );
         List<Accesos> accesos = query.getResultList();
 
         if (accesos.isEmpty()) {
@@ -75,10 +79,10 @@ public class Controller {
 
         }
 
-        em.close();
     }
 
     public static void actualicarAcceso(EntityManager em) {
+
     }
 
     public static void eliminarAcceso(EntityManager em) {
@@ -96,10 +100,6 @@ public class Controller {
         List<Accesos> accesos = query.getResultList();
 
         Accesos acceso = accesos.get(id);
-
-        if (!em.getTransaction().isActive()) {
-            em.getTransaction().begin();
-        }
 
         Calendar fchFinBloqueo = Calendar.getInstance();
         fchFinBloqueo.set(2023, Calendar.DECEMBER, 31);
@@ -127,11 +127,9 @@ public class Controller {
     }
 
     public static void leerUsuario(EntityManager em) {
-        if (!em.getTransaction().isActive()) {
-            em.getTransaction().begin();
-        }
 
-        TypedQuery<Usuarios> query = em.createQuery("SELECT u FROM Usuarios u", Usuarios.class);
+        TypedQuery<Usuarios> query = em.createQuery("SELECT u FROM Usuarios u", Usuarios.class
+        );
         List<Usuarios> usuarios = query.getResultList();
 
         if (usuarios.isEmpty()) {
@@ -145,6 +143,7 @@ public class Controller {
                 System.out.println("DNI: " + usuario.getDniUsuario());
                 System.out.println("Tlf: " + usuario.getTlfUsuario());
                 System.out.println("Email: " + usuario.getEmailUsuario());
+                System.out.println("Acceso: " + usuario.getAcceso().getDescripcion_acceso());
                 System.out.println("-------------------------------------------------");
                 System.out.println("");
             }
@@ -155,23 +154,21 @@ public class Controller {
 
         }
 
-        em.close();
     }
 
     public static void actualizarUsuario(EntityManager em) {
-        if (!em.getTransaction().isActive()) {
-            em.getTransaction().begin();
-        }
 
         System.out.println("USUARIOS DISPONIBLES:");
         leerUsuario(em);
-
+        if (!em.getTransaction().isActive()) {
+            em.getTransaction().begin();
+        }
         // Pedir al usuario que seleccione un ID de usuario para actualizar
         Scanner scanner = new Scanner(System.in);
         System.out.print("Ingrese el ID del usuario que desea actualizar: ");
         int userId = scanner.nextInt();
+        scanner.nextLine();
 
-        em.getTransaction().begin();
         Usuarios usuario = em.find(Usuarios.class, userId);
 
         if (usuario != null) {
@@ -182,26 +179,51 @@ public class Controller {
             System.out.println("DNI actual: " + usuario.getDniUsuario());
             System.out.println("Tlf actual: " + usuario.getTlfUsuario());
             System.out.println("Email actual: " + usuario.getEmailUsuario());
+            System.out.println("Acceso actual" + usuario.getAcceso().getDescripcion_acceso());
 
-            System.out.print("Nuevo nombre: ");
-            String nuevoNombre = scanner.next();
-            usuario.setNombreUsuario(nuevoNombre);
+//            System.out.print("Nuevo nombre: ");
+//            String nuevoNombre = scanner.nextLine();
+//
+//            if (!nuevoNombre.isEmpty()) {
+//                usuario.setNombreUsuario(nuevoNombre);
+//            }
+//
+//            System.out.print("Nuevos apellidos: ");
+//            String nuevosApellidos = scanner.nextLine();
+//            scanner.nextLine();
+//            if (!nuevosApellidos.isEmpty()) {
+//                usuario.setApellidosUsuario(nuevosApellidos);
+//            }
+//
+//            System.out.print("Nuevo DNI: ");
+//            String nuevoDni = scanner.nextLine();
+//            if (!nuevoDni.isEmpty()) {
+//                usuario.setDniUsuario(nuevoDni);
+//            }
+//            System.out.print("Nuevo teléfono: ");
+//            String nuevoTlf = scanner.nextLine();
+//            if (!nuevoTlf.isEmpty()) {
+//                usuario.setTlfUsuario(nuevoTlf);
+//            }
+//            System.out.print("Nuevo email: ");
+//            String nuevoEmail = scanner.nextLine();
+//            if (!nuevoEmail.isEmpty()) {
+//                usuario.setEmailUsuario(nuevoEmail);
+//            }
+            leerAcceso(em);
 
-            System.out.print("Nuevos apellidos: ");
-            String nuevosApellidos = scanner.next();
-            usuario.setApellidosUsuario(nuevosApellidos);
+            System.out.print("Ingrese el ID del nuevo acceso: ");
+            int id = scanner.nextInt();
 
-            System.out.print("Nuevo DNI: ");
-            String nuevoDni = scanner.next();
-            usuario.setDniUsuario(nuevoDni);
+            TypedQuery<Accesos> query = em.createQuery("SELECT u FROM Accesos u", Accesos.class);
+            List<Accesos> accesos = query.getResultList();
 
-            System.out.print("Nuevo teléfono: ");
-            String nuevoTlf = scanner.next();
-            usuario.setTlfUsuario(nuevoTlf);
-
-            System.out.print("Nuevo email: ");
-            String nuevoEmail = scanner.next();
-            usuario.setEmailUsuario(nuevoEmail);
+            if (id >= 0 && id < accesos.size()) {
+                Accesos acceso = accesos.get(id);
+                usuario.setAcceso(acceso);
+            } else {
+                System.out.println("El ID ingresado no es válido. Asegúrate de ingresar un número entre 0 y " + (accesos.size() - 1));
+            }
 
             em.getTransaction().commit();
             System.out.println("Usuario actualizado con éxito");
@@ -209,26 +231,19 @@ public class Controller {
             System.out.println("Usuario no encontrado");
         }
 
-        em.close();
-
     }
 
     public static void eliminarUsuario(EntityManager em) {
         leerUsuario(em);
 
-        if (!em.getTransaction().isActive()) {
-            em.getTransaction().begin();
-        }
-
         try {
-
-            em.getTransaction().begin();
 
             Scanner scanner = new Scanner(System.in);
             System.out.print("Ingrese el ID del usuario que desea eliminar: ");
             int id = scanner.nextInt();
 
-            Usuarios usuario = em.find(Usuarios.class, id);
+            Usuarios usuario = em.find(Usuarios.class,
+                    id);
             if (usuario != null) {
                 // Eliminar el usuario de la base de datos
                 em.remove(usuario);
@@ -247,7 +262,6 @@ public class Controller {
             e.printStackTrace();
         }
 
-        em.close();
     }
 
 }
