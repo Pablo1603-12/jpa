@@ -8,6 +8,7 @@ import com.mycompany.crudbiblioteca.daos.Generos;
 import com.mycompany.crudbiblioteca.daos.Libros;
 import com.mycompany.crudbiblioteca.daos.Prestamos;
 import com.mycompany.crudbiblioteca.daos.Usuarios;
+import com.sun.org.apache.bcel.internal.generic.AALOAD;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
@@ -34,7 +35,7 @@ public class Controller {
             //leerUsuario(em);
             actualizarUsuario(em);
             //eliminarUsuario(em);
-            em.getTransaction().commit();
+            //em.getTransaction().commit();
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
@@ -157,80 +158,88 @@ public class Controller {
     }
 
     public static void actualizarUsuario(EntityManager em) {
+        //em.getTransaction().begin();  // Comienzas la transacción al inicio del método
 
-        System.out.println("USUARIOS DISPONIBLES:");
-        leerUsuario(em);
-        if (!em.getTransaction().isActive()) {
-            em.getTransaction().begin();
-        }
-        // Pedir al usuario que seleccione un ID de usuario para actualizar
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Ingrese el ID del usuario que desea actualizar: ");
-        int userId = scanner.nextInt();
-        scanner.nextLine();
+        try {
+            System.out.println("USUARIOS DISPONIBLES:");
+            leerUsuario(em);
 
-        Usuarios usuario = em.find(Usuarios.class, userId);
+            // Pedir al usuario que seleccione un ID de usuario para actualizar
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Ingrese el ID del usuario que desea actualizar: ");
+            int userId = scanner.nextInt();
+            scanner.nextLine();
 
-        if (usuario != null) {
-            System.out.println("Usuario encontrado:");
-            System.out.println("ID: " + usuario.getIdUsuario());
-            System.out.println("Nombre actual: " + usuario.getNombreUsuario());
-            System.out.println("Apellido actual: " + usuario.getApellidosUsuario());
-            System.out.println("DNI actual: " + usuario.getDniUsuario());
-            System.out.println("Tlf actual: " + usuario.getTlfUsuario());
-            System.out.println("Email actual: " + usuario.getEmailUsuario());
-            System.out.println("Acceso actual" + usuario.getAcceso().getDescripcion_acceso());
+            Usuarios usuario = em.find(Usuarios.class, userId);
 
-//            System.out.print("Nuevo nombre: ");
-//            String nuevoNombre = scanner.nextLine();
+            if (usuario != null) {
+                System.out.println("Usuario encontrado:");
+                System.out.println("ID: " + usuario.getIdUsuario());
+                System.out.println("Nombre actual: " + usuario.getNombreUsuario());
+                System.out.println("Apellido actual: " + usuario.getApellidosUsuario());
+                System.out.println("DNI actual: " + usuario.getDniUsuario());
+                System.out.println("Tlf actual: " + usuario.getTlfUsuario());
+                System.out.println("Email actual: " + usuario.getEmailUsuario());
+                System.out.println("Acceso actual" + usuario.getAcceso().getDescripcion_acceso());
+
+//                System.out.print("Nuevo nombre: ");
+//                String nuevoNombre = scanner.nextLine();
 //
-//            if (!nuevoNombre.isEmpty()) {
-//                usuario.setNombreUsuario(nuevoNombre);
-//            }
+//                if (!nuevoNombre.isEmpty()) {
+//                    usuario.setNombreUsuario(nuevoNombre);
+//                }
 //
-//            System.out.print("Nuevos apellidos: ");
-//            String nuevosApellidos = scanner.nextLine();
-//            scanner.nextLine();
-//            if (!nuevosApellidos.isEmpty()) {
-//                usuario.setApellidosUsuario(nuevosApellidos);
-//            }
+//                System.out.print("Nuevos apellidos: ");
+//                String nuevosApellidos = scanner.nextLine();
 //
-//            System.out.print("Nuevo DNI: ");
-//            String nuevoDni = scanner.nextLine();
-//            if (!nuevoDni.isEmpty()) {
-//                usuario.setDniUsuario(nuevoDni);
-//            }
-//            System.out.print("Nuevo teléfono: ");
-//            String nuevoTlf = scanner.nextLine();
-//            if (!nuevoTlf.isEmpty()) {
-//                usuario.setTlfUsuario(nuevoTlf);
-//            }
-//            System.out.print("Nuevo email: ");
-//            String nuevoEmail = scanner.nextLine();
-//            if (!nuevoEmail.isEmpty()) {
-//                usuario.setEmailUsuario(nuevoEmail);
-//            }
-            leerAcceso(em);
+//                if (!nuevosApellidos.isEmpty()) {
+//                    usuario.setApellidosUsuario(nuevosApellidos);
+//                }
+//
+//                System.out.print("Nuevo DNI: ");
+//                String nuevoDni = scanner.nextLine();
+//
+//                if (!nuevoDni.isEmpty()) {
+//                    usuario.setDniUsuario(nuevoDni);
+//                }
+//
+//                System.out.print("Nuevo teléfono: ");
+//                String nuevoTlf = scanner.nextLine();
+//
+//                if (!nuevoTlf.isEmpty()) {
+//                    usuario.setTlfUsuario(nuevoTlf);
+//                }
+//
+//                System.out.print("Nuevo email: ");
+//                String nuevoEmail = scanner.nextLine();
+//
+//                if (!nuevoEmail.isEmpty()) {
+//                    usuario.setEmailUsuario(nuevoEmail);
+//                }
+                leerAcceso(em);
 
-            System.out.print("Ingrese el ID del nuevo acceso: ");
-            int id = scanner.nextInt();
+                System.out.print("Ingrese el ID del nuevo acceso: ");
+                int id = scanner.nextInt();
 
-            TypedQuery<Accesos> query = em.createQuery("SELECT u FROM Accesos u", Accesos.class);
-            List<Accesos> accesos = query.getResultList();
+                TypedQuery<Accesos> query = em.createQuery("SELECT u FROM Accesos u", Accesos.class);
+                List<Accesos> accesos = query.getResultList();
 
-            if (id >= 0 && id < accesos.size()) {
-                Accesos acceso = accesos.get(id);
-                usuario.setAcceso(acceso);
-            } else {
-                System.out.println("El ID ingresado no es válido. Asegúrate de ingresar un número entre 0 y " + (accesos.size() - 1));
+                if (id >= 0 && id < accesos.size()) {
+                    Accesos acceso = accesos.get(id);
+                    usuario.setAcceso(acceso);
+                } else {
+                    System.out.println("El ID ingresado no es válido. Asegúrate de ingresar un número entre 0 y " + (accesos.size() - 1));
+                }
+                em.getTransaction().begin();
+                em.getTransaction().commit();
+                System.out.println("Usuario actualizado con éxito");
             }
-
-            em.getTransaction().commit();
-            System.out.println("Usuario actualizado con éxito");
-        } else {
-            System.out.println("Usuario no encontrado");
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            e.printStackTrace();
         }
-
     }
 
     public static void eliminarUsuario(EntityManager em) {
@@ -262,6 +271,97 @@ public class Controller {
             e.printStackTrace();
         }
 
+    }
+
+    //AUTORES
+    public static void crearAutores(EntityManager em) {
+        //Autores Autor = new AALOAD
+    }
+
+    public static void leerAutores(EntityManager em) {
+    }
+
+    public static void actualizarAutores(EntityManager em) {
+    }
+
+    public static void eliminarAutores(EntityManager em) {
+    }
+
+    //COLECCIONES
+    public static void crearColeccion(EntityManager em) {
+    }
+
+    public static void leerColeccion(EntityManager em) {
+    }
+
+    public static void actualizarColeccion(EntityManager em) {
+    }
+
+    public static void eliminarColeccion(EntityManager em) {
+    }
+
+    //EDITORIALES
+    public static void crearEditorial(EntityManager em) {
+    }
+
+    public static void leerEditorial(EntityManager em) {
+    }
+
+    public static void actualizarEditorial(EntityManager em) {
+    }
+
+    public static void eliminarEditorial(EntityManager em) {
+    }
+
+    //ESTADO PRESTAMO
+    public static void crearEstadoPrestamo(EntityManager em) {
+    }
+
+    public static void leerEstadoPrestamo(EntityManager em) {
+    }
+
+    public static void actualizarEstadoPrestamo(EntityManager em) {
+    }
+
+    public static void eliminarEstadoPrestamo(EntityManager em) {
+    }
+
+    //GENEROS
+    public static void crearGenero(EntityManager em) {
+    }
+
+    public static void leerGenero(EntityManager em) {
+    }
+
+    public static void actualizarGenero(EntityManager em) {
+    }
+
+    public static void eliminarGenero(EntityManager em) {
+    }
+    //LIBROS
+
+    public static void crearLibro(EntityManager em) {
+    }
+
+    public static void leerLibro(EntityManager em) {
+    }
+
+    public static void actualizarLibro(EntityManager em) {
+    }
+
+    public static void eliminarLibro(EntityManager em) {
+    }
+    //PRESTAMOS
+     public static void crearPrestamo(EntityManager em) {
+    }
+
+    public static void leerPrestamo(EntityManager em) {
+    }
+
+    public static void actualizarPrestamo(EntityManager em) {
+    }
+
+    public static void eliminarPrestamo(EntityManager em) {
     }
 
 }
